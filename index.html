@@ -1,86 +1,401 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ALLITHOST</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALLITHOST // Access Granted</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Global & Base Styles */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #000; /* Deep black background */
+            color: #00ffcc; /* Neon cyan for main text */
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            overflow: hidden; /* Hide scrollbars */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            cursor: crosshair; /* Futuristic cursor */
+        }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: black;
-      color: #00ffcc;
-      font-family: 'Orbitron', sans-serif;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        /* --- Dynamic Background: Grid/Circuit Effect --- */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px; /* Size of grid cells */
+            opacity: 0.1; /* Subtle grid */
+            animation: gridPulse 8s infinite alternate; /* Fading pulse effect */
+            z-index: -2;
+        }
 
-    .glitch {
-      font-size: 3em;
-      position: relative;
-      animation: flicker 2s infinite;
-    }
+        @keyframes gridPulse {
+            0%, 100% { background-position: 0 0; opacity: 0.05; }
+            50% { background-position: 20px 20px; opacity: 0.15; } /* Slight shift and brighter */
+        }
 
-    .glitch::before, .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      left: 0;
-      width: 100%;
-      overflow: hidden;
-    }
+        /* --- Scanline Overlay --- */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                #00000000 0px,
+                #00000000 1px,
+                rgba(0, 255, 204, 0.08) 2px, /* Subtle cyan scanline */
+                rgba(0, 255, 204, 0.08) 3px
+            );
+            background-size: 100% 4px;
+            animation: scanlines 0.5s linear infinite; /* Constant scanline movement */
+            pointer-events: none; /* Allows clicks/interactions underneath */
+            z-index: -1;
+        }
 
-    .glitch::before {
-      color: #ff00c8;
-      z-index: -1;
-      top: -2px;
-      animation: glitchTop 1s infinite linear alternate-reverse;
-    }
+        @keyframes scanlines {
+            from { background-position: 0 0; }
+            to { background-position: 0 4px; }
+        }
 
-    .glitch::after {
-      color: #00ffff;
-      z-index: -2;
-      top: 2px;
-      animation: glitchBottom 1.5s infinite linear alternate-reverse;
-    }
+        /* --- Main Content Container & Initial Hidden State --- */
+        .content-container {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+            text-align: center;
+            padding: 20px;
+            max-width: 90%;
+            box-sizing: border-box;
+        }
 
-    @keyframes glitchTop {
-      0% { clip-path: inset(0 0 80% 0); transform: translate(-2px, -2px); }
-      100% { clip-path: inset(80% 0 0 0); transform: translate(2px, 2px); }
-    }
+        .content-container.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    @keyframes glitchBottom {
-      0% { clip-path: inset(80% 0 0 0); transform: translate(2px, -2px); }
-      100% { clip-path: inset(0 0 80% 0); transform: translate(-2px, 2px); }
-    }
+        /* --- Glitch Effect for Title --- */
+        .glitch-text {
+            font-size: 5em; /* Larger font size */
+            position: relative;
+            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffff, 0 0 40px #ff00c8; /* Neon glow */
+            animation: flicker 2s infinite steps(1); /* Faster, more impactful flicker */
+            display: inline-block; /* Ensure text-shadow applies correctly */
+        }
 
-    @keyframes flicker {
-      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-      20%, 24%, 55% { opacity: 0.5; }
-    }
+        /* Glitch pseudo-elements */
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
 
-    .subtext {
-      margin-top: 20px;
-      font-size: 1.2em;
-      opacity: 0.6;
-      text-align: center;
-      animation: fadeIn 3s ease-in;
-    }
+        .glitch-text::before {
+            color: #ff00c8; /* Magenta overlay */
+            z-index: -1;
+            transform: translate3d(2px, 0, 0); /* Initial offset */
+            animation: glitchTop 1.5s infinite linear alternate-reverse;
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+        .glitch-text::after {
+            color: #00ffff; /* Cyan overlay */
+            z-index: -2;
+            transform: translate3d(-2px, 0, 0); /* Initial offset */
+            animation: glitchBottom 2s infinite linear alternate-reverse;
+        }
+
+        /* Glitch Keyframes */
+        @keyframes glitchTop {
+            0% { clip-path: inset(0 0 95% 0); transform: translate3d(-5px, -5px, 0); }
+            10% { clip-path: inset(80% 0 0 0); transform: translate3d(5px, 5px, 0); }
+            20% { clip-path: inset(10% 0 90% 0); transform: translate3d(-5px, -5px, 0); }
+            30% { clip-path: inset(70% 0 0 0); transform: translate3d(5px, 5px, 0); }
+            40% { clip-path: inset(0 0 80% 0); transform: translate3d(-5px, -5px, 0); }
+            50% { clip-path: inset(90% 0 0 0); transform: translate3d(5px, 5px, 0); }
+            60% { clip-path: inset(20% 0 70% 0); transform: translate3d(-5px, -5px, 0); }
+            70% { clip-path: inset(0 0 90% 0); transform: translate3d(5px, 5px, 0); }
+            80% { clip-path: inset(60% 0 0 0); transform: translate3d(-5px, -5px, 0); }
+            90% { clip-path: inset(10% 0 80% 0); transform: translate3d(5px, 5px, 0); }
+            100% { clip-path: inset(0 0 95% 0); transform: translate3d(-5px, -5px, 0); }
+        }
+
+        @keyframes glitchBottom {
+            0% { clip-path: inset(90% 0 0 0); transform: translate3d(5px, 5px, 0); }
+            10% { clip-path: inset(0 0 80% 0); transform: translate3d(-5px, -5px, 0); }
+            20% { clip-path: inset(70% 0 0 0); transform: translate3d(5px, 5px, 0); }
+            30% { clip-path: inset(10% 0 90% 0); transform: translate3d(-5px, -5px, 0); }
+            40% { clip-path: inset(90% 0 0 0); transform: translate3d(5px, 5px, 0); }
+            50% { clip-path: inset(0 0 80% 0); transform: translate3d(-5px, -5px, 0); }
+            60% { clip-path: inset(70% 0 0 0); transform: translate3d(5px, 5px, 0); }
+            70% { clip-path: inset(10% 0 90% 0); transform: translate3d(-5px, -5px, 0); }
+            80% { clip-path: inset(0 0 80% 0); transform: translate3d(5px, 5px, 0); }
+            90% { clip-path: inset(90% 0 0 0); transform: translate3d(-5px, -5px, 0); }
+            100% { clip-path: inset(90% 0 0 0); transform: translate3d(5px, 5px, 0); }
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.8; } /* Slight flicker */
+            19%, 23%, 54% { opacity: 0.5; } /* Stronger flicker */
+        }
+
+        /* --- Subtext Typing & Cycling Animation --- */
+        .subtext {
+            font-family: 'Share Tech Mono', monospace; /* Monospaced font for code-like feel */
+            font-size: 1.1em;
+            margin-top: 30px;
+            color: rgba(0, 255, 204, 0.8);
+            min-height: 1.5em; /* Prevent layout shift during typing */
+            white-space: nowrap; /* Keep text on one line during typing */
+            overflow: hidden; /* Hide overflowing text */
+            border-right: 2px solid rgba(0, 255, 204, 0.8); /* Typing cursor */
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        /* Initial hidden state for the dynamic subtext content */
+        .subtext span {
+            display: none;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: rgba(0, 255, 204, 0.8); }
+        }
+
+        /* --- Call to Action / Footer Link --- */
+        .cta-button {
+            margin-top: 50px;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.5); /* Subtle glow */
+            position: relative; /* For the button hover effect */
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            color: #0a0a0a;
+            background: #00ffcc;
+            box-shadow: 0 0 25px #00ffff, 0 0 40px #ff00c8; /* Stronger glow on hover */
+            cursor: pointer;
+            transform: translateY(-2px);
+        }
+
+        /* Liquid hover effect for button */
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2); /* White overlay for liquid effect */
+            transition: all 0.7s cubic-bezier(0.86, 0, 0.07, 1); /* Smooth transition */
+            z-index: 0;
+            transform: skewX(-30deg);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Ensures text stays on top of pseudo-element */
+        .cta-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- Preloader Overlay --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease-out;
+            opacity: 1;
+            flex-direction: column;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            pointer-events: none; /* Disable interaction once hidden */
+        }
+
+        .preloader-text {
+            font-family: 'Share Tech Mono', monospace;
+            color: #00ffcc;
+            font-size: 1.5em;
+            white-space: pre; /* Preserve spaces for typing effect */
+            overflow: hidden;
+            border-right: 2px solid rgba(0, 255, 204, 0.8);
+            min-height: 1.2em; /* Prevent jump */
+            width: 0;
+            animation: typing-preloader 2s steps(20, end) forwards, blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing-preloader {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .glitch-text {
+                font-size: 3em;
+            }
+            .subtext {
+                font-size: 0.9em;
+            }
+            .cta-button {
+                font-size: 0.9em;
+                padding: 12px 24px;
+            }
+            .preloader-text {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glitch-text {
+                font-size: 2em;
+            }
+            .subtext {
+                font-size: 0.8em;
+            }
+            .cta-button {
+                font-size: 0.8em;
+                padding: 10px 20px;
+            }
+            .preloader-text {
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div>
-    <div class="glitch" data-text="ALLITHOST">ALLITHOST</div>
-    <div class="subtext">Red Team Operations | Signal-Based Protocols | BLE Mesh Recon</div>
-  </div>
+    <div id="preloader">
+        <div class="preloader-text">Initializing [ ]</div>
+    </div>
+
+    <div class="content-container" id="mainContent">
+        <div class="glitch-text" data-text="ALLITHOST">ALLITHOST</div>
+        <div class="subtext" id="dynamicSubtext"></div>
+        <a href="#contact" class="cta-button"><span>Access Terminal</span></a>
+    </div>
+
+    <script>
+        const preloaderText = document.querySelector('.preloader-text');
+        const preloader = document.getElementById('preloader');
+        const mainContent = document.getElementById('mainContent');
+        const dynamicSubtext = document.getElementById('dynamicSubtext');
+        const subtextPhrases = [
+            "Initializing secure connection...",
+            "Decrypting data streams...",
+            "Authenticating neural pathways...",
+            "Engaging quantum network...",
+            "Welcome to the Nexus.",
+            "ALLITHOST Online."
+        ];
+        let phraseIndex = 0;
+
+        // Preloader typing effect
+        const preloaderTypingEffect = () => {
+            let i = 0;
+            const text = "Initializing [ ]";
+            preloaderText.style.width = 'auto'; // Allow typing animation to control width
+            preloaderText.style.borderRight = '2px solid rgba(0, 255, 204, 0.8)'; // Ensure caret is visible
+
+            const type = () => {
+                if (i < text.length) {
+                    preloaderText.textContent = text.substring(0, i + 1);
+                    if (text.substring(0, i + 1) === "Initializing [ ]") { // Simple check for the placeholder
+                         preloaderText.innerHTML = "Initializing [<span style='color:#FF00C8;'>█</span>]"; // Visual "loaded" indicator
+                    }
+                    i++;
+                    setTimeout(type, 100); // Adjust typing speed
+                } else {
+                    // Preloader finished typing, now fade out
+                    preloader.classList.add('hidden');
+                    // Show main content after preloader fades
+                    preloader.addEventListener('transitionend', () => {
+                        preloader.style.display = 'none'; // Fully remove from layout
+                        mainContent.classList.add('active'); // Activate main content animation
+                        startSubtextAnimation();
+                    }, { once: true });
+                }
+            };
+            type();
+        };
+
+        // Dynamic subtext typing effect and cycling
+        const startSubtextAnimation = () => {
+            let charIndex = 0;
+            dynamicSubtext.textContent = ''; // Clear content initially
+            dynamicSubtext.style.borderRight = '2px solid rgba(0, 255, 204, 0.8)'; // Show typing caret
+
+            const typeSubtext = () => {
+                if (charIndex < subtextPhrases[phraseIndex].length) {
+                    dynamicSubtext.textContent += subtextPhrases[phraseIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeSubtext, 50); // Typing speed
+                } else {
+                    dynamicSubtext.style.borderRight = 'none'; // Hide caret after typing
+                    setTimeout(() => {
+                        // Fade out the current phrase
+                        dynamicSubtext.style.opacity = '0';
+                        dynamicSubtext.style.transition = 'opacity 1s ease-out';
+                        setTimeout(() => {
+                            // Reset for next phrase
+                            charIndex = 0;
+                            phraseIndex = (phraseIndex + 1) % subtextPhrases.length;
+                            dynamicSubtext.textContent = '';
+                            dynamicSubtext.style.opacity = '1';
+                            dynamicSubtext.style.transition = 'none'; // Reset transition for instant appearance
+                            dynamicSubtext.style.borderRight = '2px solid rgba(0, 255, 204, 0.8)'; // Bring back caret
+                            typeSubtext(); // Start typing next phrase
+                        }, 1000); // Delay before starting next phrase
+                    }, 2000); // How long to display phrase after typing
+                }
+            };
+            typeSubtext();
+        };
+
+        // Start the preloader animation on load
+        window.addEventListener('load', preloaderTypingEffect);
+    </script>
 </body>
 </html>
