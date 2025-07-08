@@ -3,37 +3,51 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>SALUS // Initiated</title>
+    <title>SALUS // Online</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        /* Base Styles - Simple, Direct, Dark */
+        /* Base Styles - Simple, Retro, Green/Grey on Black */
         html, body {
             margin: 0;
             padding: 0;
-            background: black; /* Solid black background */
-            color: #00ffcc; /* Neon cyan for main text */
-            font-family: 'Orbitron', sans-serif;
+            background: #000; /* Solid black background, like a terminal */
+            color: #32CD32; /* Classic Limewire LimeGreen for primary text */
+            font-family: 'Share Tech Mono', monospace; /* Default to monospace for consistency */
             height: 100vh;
-            overflow: hidden; /* No scrollbars, keeps it clean */
+            overflow: hidden; /* Keeps it super clean, no scrollbars */
             display: flex;
             flex-direction: column; /* Stack elements vertically */
             justify-content: center;
             align-items: center;
             text-align: center;
             position: relative;
+            /* Removed custom cursor for more simplicity */
         }
 
-        /* --- Glitch Effect for Main Title: SALUS --- */
+        /* --- Main Content Container - Simulating an old application window --- */
+        .main-container {
+            background-color: #1a1a1a; /* Dark grey for a window background */
+            border: 2px solid #32CD32; /* LimeGreen border */
+            padding: 40px 60px;
+            box-shadow: 0 0 15px rgba(50, 205, 50, 0.4); /* Subtle green glow around the "window" */
+            max-width: 90%;
+            box-sizing: border-box;
+        }
+
+
+        /* --- Main Title: SALUS (Orbitron font, subtle glitch) --- */
         .glitch-text {
-            font-size: 5em; /* Prominent size */
+            font-family: 'Orbitron', sans-serif; /* Keep Orbitron for the bold title */
+            font-size: 5em;
             position: relative;
-            text-shadow: 0 0 8px #00ffcc, 0 0 15px #00ffff, 0 0 25px #ff00c8; /* Stronger, but clean neon glow */
-            animation: flicker 1.5s infinite steps(1); /* Sharp, impactful flicker */
-            /* Removed display: inline-block as it's not strictly needed here and can complicate centering */
+            text-shadow: 0 0 5px #32CD32, 0 0 10px rgba(50, 205, 50, 0.8); /* Refined neon glow */
+            /* Animation for subtle, infrequent interference */
+            animation: flicker-subtle 10s infinite alternate; /* Slower, less frequent flicker */
         }
 
+        /* Glitch pseudo-elements - Very small, jerky offsets */
         .glitch-text::before, .glitch-text::after {
-            content: attr(data-text); /* Uses the text from the data-text attribute */
+            content: attr(data-text);
             position: absolute;
             top: 0;
             left: 0;
@@ -43,83 +57,80 @@
         }
 
         .glitch-text::before {
-            color: #ff00c8; /* Magenta overlay */
+            color: rgba(255, 0, 200, 0.5); /* Faint magenta interference */
             z-index: -1;
-            transform: translate(-3px, 0); /* Initial offset for glitch appearance */
-            animation: glitchTop 1s infinite linear alternate-reverse;
+            transform: translate(-1px, 0);
+            animation: glitchEffect 0.3s linear infinite alternate; /* Fast, short glitch */
+            animation-delay: 2s; /* Start after initial load */
+            animation-iteration-count: 2; /* Only two glitches per cycle */
+            opacity: 0; /* Hidden by default */
         }
 
         .glitch-text::after {
-            color: #00ffff; /* Cyan overlay */
+            color: rgba(0, 255, 255, 0.5); /* Faint cyan interference */
             z-index: -2;
-            transform: translate(3px, 0); /* Initial offset for glitch appearance */
-            animation: glitchBottom 1.2s infinite linear alternate-reverse;
+            transform: translate(1px, 0);
+            animation: glitchEffect 0.2s linear infinite alternate; /* Fast, short glitch */
+            animation-delay: 2.1s; /* Slightly offset */
+            animation-iteration-count: 2; /* Only two glitches per cycle */
+            opacity: 0; /* Hidden by default */
         }
 
-        /* Simplified Glitch Keyframes - More direct movements */
-        @keyframes glitchTop {
-            0% { clip-path: inset(0 0 90% 0); transform: translate(-4px, -4px); }
-            50% { clip-path: inset(10% 0 0 0); transform: translate(4px, 4px); }
-            100% { clip-path: inset(0 0 90% 0); transform: translate(-4px, -4px); }
+        /* Keyframes for the short, sharp glitch effect */
+        @keyframes glitchEffect {
+            0% { clip-path: inset(0 0 95% 0); transform: translate(-1px, -1px); opacity: 1; }
+            50% { clip-path: inset(5% 0 90% 0); transform: translate(1px, 1px); opacity: 1; }
+            100% { clip-path: inset(0 0 95% 0); transform: translate(-1px, -1px); opacity: 0; } /* Fade out quickly */
+        }
+        /* Keyframes for overall subtle, infrequent text flicker */
+        @keyframes flicker-subtle {
+            0%, 98%, 100% { opacity: 1; }
+            99% { opacity: 0.9; } /* Barely noticeable flicker */
         }
 
-        @keyframes glitchBottom {
-            0% { clip-path: inset(10% 0 0 0); transform: translate(4px, -4px); }
-            50% { clip-path: inset(0 0 90% 0); transform: translate(-4px, 4px); }
-            100% { clip-path: inset(10% 0 0 0); transform: translate(4px, -4px); }
-        }
 
-        /* Flicker Keyframes - Sharp and noticeable */
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.7; } /* More prominent flicker */
-        }
-
-        /* Subtext - Simple fade-in */
+        /* Subtext - Direct and functional */
         .subtext {
-            font-family: 'Share Tech Mono', monospace; /* Monospaced for terminal feel */
-            font-size: 1.2em;
-            margin-top: 30px; /* Space from main title */
-            color: rgba(0, 255, 204, 0.7); /* Slightly muted cyan */
-            opacity: 0; /* Starts hidden */
-            animation: fadeIn 2s ease-out 1s forwards; /* Fade in after 1 second delay */
+            font-size: 1.3em; /* Slightly larger, more readable */
+            margin-top: 30px;
+            color: #32CD32; /* Consistent lime green */
+            animation: textFadeIn 1.5s ease-out forwards; /* Simple fade in */
+            animation-delay: 0.5s; /* Delay appearance slightly after title */
+            opacity: 0; /* Start hidden */
         }
-
-        @keyframes fadeIn {
+        @keyframes textFadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Call to Action Button - Limewire/Terminal style */
+
+        /* Call to Action Button - Blocky, Limewire-esque */
         .cta-button {
             margin-top: 50px;
             padding: 12px 25px;
-            background: #0a0a0a; /* Dark button background */
-            border: 1px solid #00ffcc; /* Neon cyan border */
-            color: #00ffcc;
-            font-family: 'Share Tech Mono', monospace; /* Consistent monospace font */
-            font-size: 1em;
+            background: #222; /* Dark grey button background */
+            border: 1px solid #32CD32; /* LimeGreen border */
+            color: #32CD32;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1em;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px; /* Subtle spacing */
             text-decoration: none;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 8px rgba(0, 255, 204, 0.4); /* Subtle initial glow */
+            transition: background-color 0.1s, color 0.1s, border-color 0.1s; /* Fast transitions */
+            box-shadow: none; /* No complex shadows */
             cursor: pointer;
-            opacity: 0; /* Starts hidden */
-            animation: fadeIn 2s ease-out 2s forwards; /* Fade in after 2 second delay */
+            opacity: 0; /* Start hidden */
+            animation: textFadeIn 1.5s ease-out forwards; /* Fade in */
+            animation-delay: 1s; /* Delay appearance after subtext */
         }
 
         .cta-button:hover {
-            background-color: #00ffcc; /* Invert colors on hover */
-            color: #000;
-            border-color: #00ffff; /* Brighter border on hover */
-            box-shadow: 0 0 15px #00ffff, 0 0 25px #ff00c8; /* Stronger, dual-color glow */
-            transform: translateY(-2px); /* Slight lift */
+            background-color: #32CD32; /* LimeGreen fill on hover */
+            color: #000; /* Black text on hover */
+            border-color: #32CD32; /* Solid lime green border */
         }
 
-        /* Removed all complex pseudo-element liquid hover effects for simplicity */
-
-        /* Media Queries - Basic responsiveness */
+        /* Media Queries for Responsiveness */
         @media (max-width: 768px) {
             .glitch-text {
                 font-size: 3em;
@@ -130,6 +141,9 @@
             .cta-button {
                 font-size: 0.9em;
                 padding: 10px 20px;
+            }
+            .main-container {
+                padding: 30px 40px;
             }
         }
 
@@ -144,14 +158,17 @@
                 font-size: 0.8em;
                 padding: 8px 15px;
             }
+            .main-container {
+                padding: 20px 25px;
+            }
         }
     </style>
 </head>
 <body>
-    <div>
+    <div class="main-container">
         <div class="glitch-text" data-text="SALUS">SALUS</div>
-        <div class="subtext">The veil lifts.</div>
-        <a href="#access" class="cta-button">Access Protocol</a>
+        <div class="subtext">Status: Online.</div>
+        <a href="#access" class="cta-button">Engage Protocol</a>
     </div>
 </body>
 </html>
