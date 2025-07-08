@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shiloh.exe - Digital Explorer</title>
+    <title>system32.zip - Digital Explorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
         /* This entire style block is meticulously crafted to mimic classic Windows 98/XP era UI,
            which Limewire extensively used for its desktop application. */
@@ -228,34 +229,56 @@
         }
 
         /* Specific styles for About Me content */
-        .about-me-content {
+        .content-pane { /* General style for all content panes */
             padding: 10px;
             font-size: 12px;
             line-height: 1.6;
+            width: 100%; /* Ensure panes take full width of results-area */
+            height: 100%; /* Ensure panes take full height for scrolling if needed */
+            overflow: auto; /* Individual scrolling for each pane */
+            display: none; /* Hidden by default, JS toggles visibility */
+            flex-direction: column; /* Default text flow */
         }
-        .about-me-content h1 {
+        .content-pane h1 {
             font-size: 1.6em;
             margin-bottom: 10px;
             color: #0066cc; /* Blue heading */
         }
-        .about-me-content p {
+        .content-pane p {
             margin-bottom: 8px;
         }
-        .about-me-content ul {
+        .content-pane ul {
             list-style: disc;
             margin-left: 20px;
             margin-bottom: 8px;
         }
-        .about-me-content strong {
+        .content-pane strong {
             color: #0084ff; /* Highlighted text */
         }
 
         /* Specific styles for My Tunes content */
         .my-tunes-content {
+            /* This will be set to display:flex and flex-direction:column by JS when active */
+        }
+
+        /* Under Construction specific style */
+        .under-construction {
             display: flex;
             flex-direction: column;
-            height: 100%; /* Make it fill the results-area */
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            font-size: 1.5em;
+            color: #a0a0a0;
+            font-family: 'VT323', monospace;
         }
+        .under-construction span {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 2em; /* Bigger icon */
+        }
+
 
         .results-header {
             background: #f0f0f0; /* Grey header for sections */
@@ -269,7 +292,6 @@
 
         .results-table {
             flex: 1; /* Makes table fill remaining vertical space */
-            overflow: auto; /* Enable scrolling for table content */
             border-collapse: collapse; /* For clean table borders */
             width: 100%;
             font-size: 11px;
@@ -491,7 +513,7 @@
 <body>
     <div class="window">
         <div class="title-bar">
-            <span>💻 Shiloh.exe - Digital Explorer</span>
+            <span>💾 system32.zip - Digital Explorer</span>
             <div class="controls">
                 <span>0</span> <span>1</span> <span>r</span> </div>
         </div>
@@ -521,54 +543,43 @@
                 <div class="sidebar-section">
                     <div class="sidebar-header">My Domains</div>
                     <div class="sidebar-content">
-                        <div class="sidebar-item selected" data-content-target="pentesting">🛡️ Penetration Testing</div>
-                        <div class="sidebar-item" data-content-target="bug_bounty">💰 Bug Bounty</div>
-                        <div class="sidebar-item" data-content-target="red_teaming">🔴 Red Teaming</div>
-                        <div class="sidebar-item" data-content-target="bluetooth_security">📡 Bluetooth Security</div>
+                        <div class="sidebar-item selected" data-content-target="underConstructionContent">🛡️ Penetration Testing</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">💰 Bug Bounty</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">🔴 Red Teaming</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">📡 Bluetooth Security</div>
                     </div>
                 </div>
 
                 <div class="sidebar-section">
                     <div class="sidebar-header">Technologies</div>
                     <div class="sidebar-content">
-                        <div class="sidebar-item" data-content-target="rust">🦀 Rust</div>
-                        <div class="sidebar-item" data-content-target="python">🐍 Python</div>
-                        <div class="sidebar-item" data-content-target="networking">🌐 Networking</div>
-                        <div class="sidebar-item" data-content-target="linux">🐧 Linux</div>
-                        <div class="sidebar-item" data-content-target="assembly">⚙️ Assembly</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">🦀 Rust</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">🐍 Python</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">🌐 Networking</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">🐧 Linux</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">⚙️ Assembly</div>
                     </div>
                 </div>
 
                 <div class="sidebar-section">
                     <div class="sidebar-header">Interests</div>
                     <div class="sidebar-content">
-                        <div class="sidebar-item" data-content-target="hacking">😈 All Things Hacking</div>
-                        <div class="sidebar-item" data-content-target="research">📚 Security Research</div>
-                        <div class="sidebar-item" data-content-target="open_source">🔒 Open Source</div>
-                        <div class="sidebar-item" data-content-target="music_production">🎵 Music Production</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">😈 All Things Hacking</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">📚 Security Research</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">🔒 Open Source</div>
+                        <div class="sidebar-item" data-content-target="underConstructionContent">🎵 Music Production</div>
                     </div>
                 </div>
             </div>
 
             <div class="results-area">
-                <div id="aboutMeContent" class="content-pane">
-                    <div class="results-header">About Shiloh</div>
-                    <div class="about-me-content">
-                        <p>Hello! I'm **Shiloh**, a dedicated penetration tester, bug bounty hunter, and an endlessly curious human. You might also know me by my various aliases from years across different platforms.</p>
-                        <p>My journey in the digital realm is driven by a deep fascination with **hacking** in all its forms. I thrive on **understanding 'I see now'** – the profound ability to perceive beyond the obvious, to uncover hidden truths, and to truly see without your eyes.</p>
-                        <p>My core passions and areas of expertise include:</p>
-                        <ul>
-                            <li>**Penetration Testing & Red Teaming:** Proactively identifying and exploiting vulnerabilities to strengthen defenses.</li>
-                            <li>**Bug Bounty Hunting:** Discovering critical flaws and contributing to a safer digital ecosystem.</li>
-                            <li>**Bluetooth Security:** Diving deep into wireless protocols to uncover new attack vectors.</li>
-                            <li>**Rust Development:** Building secure, high-performance tools and applications.</li>
-                        </ul>
-                        <p>If you're looking to connect or discuss anything in the realm of digital security, feel free to reach out:</p>
-                        <ul>
-                            <li><strong>Email:</strong> <a href="mailto:0xshiloh@proton.me" style="color: #0084ff; text-decoration: underline;">0xshiloh@proton.me</a></li>
-                            <li><strong>X (formerly Twitter):</strong> <a href="https://x.com/shilohsecurity" target="_blank" style="color: #0084ff; text-decoration: underline;">@shilohsecurity</a></li>
-                        </ul>
-                        <p>Ready to dive deeper? Navigate using the toolbar or sidebar sections!</p>
+                <div id="underConstructionContent" class="content-pane" style="display: none;">
+                    <div class="results-header">Under Construction</div>
+                    <div class="under-construction">
+                        <span>🚧</span>
+                        <p>This section is currently being updated by Shiloh.</p>
+                        <p>Please check back later for more content!</p>
+                        <p>Accessing... [ERROR 404]</p>
                     </div>
                 </div>
 
@@ -588,10 +599,11 @@
                                 <th>Status</th>
                                 <th>Released</th>
                                 <th>Format</th>
+                                <th>Play</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr data-audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> 
                                 <td>1</td>
                                 <td><span class="rating-stars">★★★★★</span></td>
                                 <td>T3</td>
@@ -603,8 +615,9 @@
                                 <td>Online</td>
                                 <td>2023</td>
                                 <td>mp3</td>
+                                <td><button class="download-button play-track" data-track-id="Koox by Roogunit">▶️</button></td>
                             </tr>
-                            <tr>
+                            <tr data-audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">
                                 <td>2</td>
                                 <td><span class="rating-stars">★★★★☆</span></td>
                                 <td>T2</td>
@@ -616,8 +629,9 @@
                                 <td>Online</td>
                                 <td>2015</td>
                                 <td>mp3</td>
+                                <td><button class="download-button play-track" data-track-id="Molasses by Earl Sweatshirt,RZA">▶️</button></td>
                             </tr>
-                            <tr>
+                            <tr data-audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">
                                 <td>3</td>
                                 <td><span class="rating-stars">★★★★★</span></td>
                                 <td>T3</td>
@@ -629,8 +643,9 @@
                                 <td>Online</td>
                                 <td>2003</td>
                                 <td>mp3</td>
+                                <td><button class="download-button play-track" data-track-id="Lucky You by Deftones">▶️</button></td>
                             </tr>
-                            <tr>
+                            <tr data-audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">
                                 <td>4</td>
                                 <td><span class="rating-stars">★★★★☆</span></td>
                                 <td>Modem</td>
@@ -642,8 +657,9 @@
                                 <td>Offline</td>
                                 <td>2024</td>
                                 <td>mp3</td>
+                                <td><button class="download-button play-track" data-track-id="Peligro by Jay York">▶️</button></td>
                             </tr>
-                            <tr>
+                            <tr data-audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">
                                 <td>5</td>
                                 <td><span class="rating-stars">★★★★★</span></td>
                                 <td>T3</td>
@@ -655,8 +671,9 @@
                                 <td>Online</td>
                                 <td>2022</td>
                                 <td>mp3</td>
+                                <td><button class="download-button play-track" data-track-id="I Am Nothing by Decoder">▶️</button></td>
                             </tr>
-                            <tr>
+                            <tr data-audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">
                                 <td>6</td>
                                 <td><span class="rating-stars">★★★★★</span></td>
                                 <td>T3</td>
@@ -668,8 +685,9 @@
                                 <td>Online</td>
                                 <td>2019</td>
                                 <td>mp3</td>
+                                <td><button class="download-button play-track" data-track-id="Penetration Testing by Schacke">▶️</button></td>
                             </tr>
-                            <tr>
+                            <tr data-audio-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">
                                 <td>7</td>
                                 <td><span class="rating-stars">★★★★☆</span></td>
                                 <td>Cable</td>
@@ -681,39 +699,12 @@
                                 <td>Online</td>
                                 <td>2008</td>
                                 <td>mp3</td>
+                                <td><button class="download-button play-track" data-track-id="Red Rum by Lil Wayne">▶️</button></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div id="skillsContent" class="content-pane" style="display: none;">
-                    <div class="results-header">Shiloh's Core Skills</div>
-                    <div class="about-me-content">
-                        <h1>Skills Matrix</h1>
-                        <p>My expertise spans various critical domains:</p>
-                        <ul>
-                            <li><strong>Cybersecurity:</strong> Penetration Testing, Red Teaming, Bug Bounty Hunting, Malware Analysis, Incident Response</li>
-                            <li><strong>Programming Languages:</strong> Rust, Python, C/C++, Assembly</li>
-                            <li><strong>Network Security:</strong> Bluetooth, Wi-Fi, Protocol Analysis, Secure Communications</li>
-                            <li><strong>Cloud & DevOps:</strong> AWS, Docker, Kubernetes, CI/CD Pipelines (with a security focus)</li>
-                        </ul>
-                        <p>Continuously expanding knowledge in offensive security techniques and low-level system vulnerabilities. Always eager to tackle new challenges!</p>
-                    </div>
-                </div>
-                <div id="projectsContent" class="content-pane" style="display: none;">
-                    <div class="results-header">Shiloh's Projects Log</div>
-                    <div class="about-me-content">
-                        <h1>Project Database</h1>
-                        <p>A selection of my ongoing and completed projects, often driven by my curiosity to understand and secure:</p>
-                        <ul>
-                            <li><strong>Bluetooth Vulnerability Research:</strong> Discovering and exploiting flaws in BLE and classic Bluetooth stacks.</li>
-                            <li><strong>Custom Red Team Tooling (Rust):</strong> Developing stealthy and efficient tools for simulated adversary operations.</li>
-                            <li><strong>Automated Bug Discovery Framework:</strong> A personal project for streamlining bug bounty reconnaissance and initial analysis.</li>
-                            <li><strong>OSINT Automation Scripts:</strong> Python tools for gathering and analyzing publicly available information for security assessments.</li>
-                        </ul>
-                        <p>More detailed project breakdowns and code repositories available upon request or via direct connection.</p>
-                    </div>
-                </div>
                 <div id="contactContent" class="content-pane" style="display: none;">
                     <div class="results-header">Connect with Shiloh</div>
                     <div class="about-me-content">
@@ -733,7 +724,7 @@
 
         <div class="bottom-panel">
             <div class="downloads-header">
-                📝 Shiloh's Activity Log / Current Focus
+                📝 system32.zip Activity Log / Current Focus
             </div>
             <div class="downloads-content">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
@@ -758,25 +749,27 @@
         </div>
 
         <div class="player-controls">
-            <div class="player-button" title="View Profile">4</div> <div class="player-button" title="Open Console">;</div> <div class="player-button" title="Adjust Settings">:</div> <div class="player-button" title="Deploy Project">9</div> <div class="player-button" title="Share Data">></div> <div class="volume-slider" title="System Load"></div>
-            <span style="margin-left: 8px; font-size: 11px;">🎵 Now Processing: Zero-Day Discovery</span>
+            <div id="playerPlay" class="player-button" title="Play">;</div> <div id="playerPause" class="player-button" title="Pause">:</div> <div id="playerStop" class="player-button" title="Stop">4</div> <div id="playerPrev" class="player-button" title="Previous Track"><</div> <div id="playerNext" class="player-button" title="Next Track">></div> <div class="volume-slider" title="System Load"></div>
+            <span id="nowPlayingText" style="margin-left: 8px; font-size: 11px;">🎵 Now Processing: Secure Network Comm.</span>
         </div>
 
         <div class="status-bar">
             <div class="status-left">
                 <div class="connection-status">
                     <div class="connection-indicator"></div>
-                    <span>Shiloh's Network Connected</span>
+                    <span>system32.zip Connected</span>
                 </div>
                 <span>🌐 127 Peers</span>
-                <span>📤 4 Projects (2.1 GB/s)</span>
-                <span>📥 8 Ideas (5.6 GB/s)</span>
+                <span>📤 4 Files (2.1 MB/s)</span>
+                <span>📥 8 Files (5.6 MB/s)</span>
             </div>
             <div class="status-right">
-                <span class="limewire-logo">⚡ Shiloh's Digital Core</span>
+                <span class="limewire-logo">⚡ system32.zip Core</span>
             </div>
         </div>
     </div>
+
+    <audio id="audioPlayer" preload="auto"></audio>
 
     <script>
         // --- Content Switching Logic ---
@@ -787,12 +780,10 @@
             contentPanes.forEach(pane => {
                 pane.style.display = 'none'; // Hide all content panes
             });
-            document.getElementById(contentId).style.display = 'flex'; // Show the selected pane
-            if (contentId === 'myTunesContent') {
-                 // My Tunes content needs column layout, others can be block/flex-column
-                 document.getElementById(contentId).style.flexDirection = 'column';
-            } else {
-                document.getElementById(contentId).style.flexDirection = 'column'; // Default for text based panes
+            const targetPane = document.getElementById(contentId);
+            if (targetPane) {
+                targetPane.style.display = 'flex'; // Show the selected pane
+                targetPane.style.flexDirection = 'column'; // Ensure content flows vertically
             }
         }
 
@@ -806,65 +797,148 @@
                 // Determine which content to show based on button ID
                 let contentToShowId;
                 switch(this.id) {
-                    case 'aboutMeBtn': contentToShowId = 'aboutMeContent'; break;
-                    case 'skillsBtn': contentToShowId = 'skillsContent'; break;
-                    case 'projectsBtn': contentToShowId = 'projectsContent'; break;
                     case 'myTunesBtn': contentToShowId = 'myTunesContent'; break;
                     case 'contactBtn': contentToShowId = 'contactContent'; break;
-                    default: contentToShowId = 'aboutMeContent';
+                    case 'aboutMeBtn':
+                    case 'skillsBtn':
+                    case 'projectsBtn':
+                    default: contentToShowId = 'underConstructionContent'; // Default to under construction
                 }
                 showContent(contentToShowId);
             });
         });
 
-        // Initialize to show About Me content on load
-        showContent('aboutMeContent');
+        // Initialize to show the Under Construction content on load for "About Me"
+        document.getElementById('aboutMeBtn').classList.add('active'); // Set About Me button active
+        showContent('underConstructionContent');
 
 
-        // --- Sidebar Item Clicking (Optional: could load content into results-area) ---
+        // --- Sidebar Item Clicking (all link to Under Construction for now) ---
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function() {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('selected'));
                 this.classList.add('selected');
 
-                // Example: You could load specific details into the main content area here
-                // For now, it just logs what was clicked.
-                const contentType = this.getAttribute('data-content-target');
-                console.log(`Sidebar item selected: ${this.textContent.trim()} (Category: ${contentType})`);
-                // You could, for example, filter content within #skillsContent based on this
+                // For now, all sidebar clicks will show the under construction pane
+                showContent('underConstructionContent');
+                console.log(`Sidebar item selected: ${this.textContent.trim()} (routed to Under Construction)`);
             });
         });
 
-        // --- Results Table Interactivity (for My Tunes) ---
-        document.querySelectorAll('.results-table tr').forEach(row => {
-            if (row.querySelector('th')) return; // Skip the header row
+        // --- Music Playback Logic ---
+        const audioPlayer = document.getElementById('audioPlayer');
+        const nowPlayingText = document.getElementById('nowPlayingText');
+        let currentTrackRow = null; // Keep track of the currently playing row
 
+        function playTrack(audioSrc, trackName, rowElement) {
+            if (audioPlayer.src !== audioSrc) {
+                audioPlayer.src = audioSrc;
+                audioPlayer.load(); // Load the new track
+            }
+
+            // Remove highlight from previous track
+            if (currentTrackRow) {
+                currentTrackRow.classList.remove('selected');
+            }
+            // Highlight the new track
+            if (rowElement) {
+                rowElement.classList.add('selected');
+                currentTrackRow = rowElement;
+            }
+
+            audioPlayer.play()
+                .then(() => {
+                    nowPlayingText.textContent = `🎵 Now Playing: ${trackName}`;
+                    console.log(`Playing: ${trackName}`);
+                })
+                .catch(error => {
+                    console.error("Error playing audio:", error);
+                    nowPlayingText.textContent = `🎵 Error Playing: ${trackName}`;
+                    alert(`Error playing "${trackName}". Make sure the audio URL is valid.`);
+                });
+        }
+
+        // Play button logic (in table)
+        document.querySelectorAll('.play-track').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent row double-click from firing too
+                const row = this.closest('tr');
+                const audioSrc = row.dataset.audioSrc;
+                const trackName = this.dataset.trackId;
+                playTrack(audioSrc, trackName, row);
+            });
+        });
+
+        // Double-click row to play
+        document.querySelectorAll('.results-table tbody tr').forEach(row => {
             row.addEventListener('dblclick', function() {
-                const trackName = this.cells[3].textContent; // Get the "Track / Item" cell
-                alert(`Now playing: ${trackName}...`);
-                // Update "Now Playing" in player controls
-                document.querySelector('.player-controls span').textContent = `🎵 Now Playing: ${trackName}`;
+                const audioSrc = this.dataset.audioSrc;
+                const trackName = this.cells[3].textContent; // Get the track name from the 4th cell
+                playTrack(audioSrc, trackName, this);
             });
         });
 
-        // --- Toolbar & Player Button Interactivity ---
-        document.querySelectorAll('.player-button').forEach(button => {
-            button.addEventListener('click', function() {
-                console.log(`Player button clicked: ${this.title}`);
-            });
+
+        // --- Player Controls (Webdings buttons) ---
+        const playerPlay = document.getElementById('playerPlay');
+        const playerPause = document.getElementById('playerPause');
+        const playerStop = document.getElementById('playerStop');
+        const playerPrev = document.getElementById('playerPrev');
+        const playerNext = document.getElementById('playerNext');
+
+        playerPlay.addEventListener('click', () => audioPlayer.play());
+        playerPause.addEventListener('click', () => audioPlayer.pause());
+        playerStop.addEventListener('click', () => {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            nowPlayingText.textContent = '🎵 Now Processing: Secure Network Comm.';
+            if (currentTrackRow) {
+                currentTrackRow.classList.remove('selected');
+                currentTrackRow = null;
+            }
+        });
+
+        playerPrev.addEventListener('click', () => {
+            // Basic prev/next: find current track in table and play prev/next
+            if (currentTrackRow) {
+                const prevRow = currentTrackRow.previousElementSibling;
+                if (prevRow && prevRow.dataset.audioSrc) {
+                    playTrack(prevRow.dataset.audioSrc, prevRow.cells[3].textContent, prevRow);
+                } else {
+                    console.log("No previous track.");
+                }
+            }
+        });
+
+        playerNext.addEventListener('click', () => {
+            // Basic prev/next: find current track in table and play prev/next
+            if (currentTrackRow) {
+                const nextRow = currentTrackRow.nextElementSibling;
+                if (nextRow && nextRow.dataset.audioSrc) {
+                    playTrack(nextRow.dataset.audioSrc, nextRow.cells[3].textContent, nextRow);
+                } else {
+                    console.log("No next track.");
+                }
+            }
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            console.log("Track ended. Playing next...");
+            playerNext.click(); // Automatically play next track
         });
 
         // --- Search Functionality (basic text search within current content pane) ---
         document.querySelector('.search-button').addEventListener('click', function() {
             const searchTerm = document.querySelector('.search-input').value.toLowerCase();
-            const currentPaneId = document.querySelector('.content-pane[style*="display: flex"]').id; // Get ID of visible pane
-            const currentPaneElement = document.getElementById(currentPaneId);
+            const currentPane = document.querySelector('.content-pane[style*="display: flex"]'); // Get visible pane
+            if (!currentPane) return; // No pane visible
+
+            const currentPaneId = currentPane.id;
 
             if (searchTerm.trim()) {
                 alert(`Searching within "${currentPaneId}" for: "${searchTerm}"`);
-                // Implement actual search/highlighting logic here
-                // For a simple text highlight:
-                // if (currentPaneElement.textContent.toLowerCase().includes(searchTerm)) {
+                // For a simple text highlight (conceptual):
+                // if (currentPane.textContent.toLowerCase().includes(searchTerm)) {
                 //    alert(`Found "${searchTerm}" in ${currentPaneId}!`);
                 // } else {
                 //    alert(`"${searchTerm}" not found in ${currentPaneId}.`);
@@ -881,12 +955,12 @@
         // --- Mimic random network activity in status bar ---
         setInterval(() => {
             const randPeers = Math.floor(Math.random() * 50) + 10; // 10-60 peers
-            const randUpload = (Math.random() * 10).toFixed(1); // 0.0-9.9 GB/s
-            const randDownload = (Math.random() * 7).toFixed(1); // 0.0-6.9 GB/s
+            const randUpload = (Math.random() * 10).toFixed(1); // 0.0-9.9 MB/s (changed from GB/s for realism)
+            const randDownload = (Math.random() * 7).toFixed(1); // 0.0-6.9 MB/s (changed from GB/s for realism)
 
             document.querySelector('.status-left span:nth-child(2)').textContent = `🌐 ${randPeers} Peers`;
-            document.querySelector('.status-left span:nth-child(3)').textContent = `📤 ${Math.floor(Math.random() * 5) + 1} Files (${randUpload} GB/s)`;
-            document.querySelector('.status-left span:nth-child(4)').textContent = `📥 ${Math.floor(Math.random() * 5) + 1} Files (${randDownload} GB/s)`;
+            document.querySelector('.status-left span:nth-child(3)').textContent = `📤 ${Math.floor(Math.random() * 5) + 1} Files (${randUpload} MB/s)`;
+            document.querySelector('.status-left span:nth-child(4)').textContent = `📥 ${Math.floor(Math.random() * 5) + 1} Files (${randDownload} MB/s)`;
         }, 5000); // Update every 5 seconds
     </script>
 </body>
