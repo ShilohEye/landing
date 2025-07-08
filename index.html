@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wickr // Digital Portfolio</title>
+    <title>Shiloh.exe - Digital Explorer</title>
     <style>
         /* This entire style block is meticulously crafted to mimic classic Windows 98/XP era UI,
            which Limewire extensively used for its desktop application. */
@@ -122,9 +122,10 @@
             background: #d0d0d0;
         }
 
-        .toolbar-button:active {
+        .toolbar-button:active, .toolbar-button.active { /* Added .active state */
             border: 1px inset #c0c0c0;
             transform: translateY(1px);
+            background: #d0d0d0; /* Keep pressed look */
         }
 
         /* Main Content Area - Contains sidebar and results */
@@ -221,16 +222,49 @@
             flex: 1; /* Takes up remaining horizontal space */
             display: flex;
             flex-direction: column;
-            background: white; /* White background for table area */
+            background: white; /* White background for content area */
+            padding: 8px; /* Padding inside the content area */
+            overflow: auto; /* Allow scrolling for content that exceeds height */
+        }
+
+        /* Specific styles for About Me content */
+        .about-me-content {
+            padding: 10px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .about-me-content h1 {
+            font-size: 1.6em;
+            margin-bottom: 10px;
+            color: #0066cc; /* Blue heading */
+        }
+        .about-me-content p {
+            margin-bottom: 8px;
+        }
+        .about-me-content ul {
+            list-style: disc;
+            margin-left: 20px;
+            margin-bottom: 8px;
+        }
+        .about-me-content strong {
+            color: #0084ff; /* Highlighted text */
+        }
+
+        /* Specific styles for My Tunes content */
+        .my-tunes-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Make it fill the results-area */
         }
 
         .results-header {
-            background: #f0f0f0; /* Grey header for results section */
+            background: #f0f0f0; /* Grey header for sections */
             padding: 4px 8px;
             border-bottom: 1px solid #999;
             font-weight: bold;
             font-size: 11px;
             user-select: none;
+            margin: -8px -8px 8px -8px; /* Offset padding from results-area */
         }
 
         .results-table {
@@ -239,6 +273,7 @@
             border-collapse: collapse; /* For clean table borders */
             width: 100%;
             font-size: 11px;
+            background: white; /* Ensure table background is white */
         }
 
         .results-table th {
@@ -253,6 +288,7 @@
             top: 0;
             cursor: pointer; /* Indicates sortable columns */
             user-select: none;
+            z-index: 2; /* Ensure sticky header is above content */
         }
 
         .results-table th:hover {
@@ -416,14 +452,14 @@
 
         /* Responsive adjustments - scale down the window */
         @media (max-width: 1024px) {
-            .limewire-window {
+            .window {
                 width: 95vw;
                 height: 95vh;
             }
         }
         @media (max-width: 768px) {
             body { font-size: 10px; }
-            .limewire-window {
+            .window {
                 width: 98vw;
                 height: 98vh;
             }
@@ -437,7 +473,7 @@
             }
             .sidebar-item { padding: 2px 8px; }
             .sidebar { width: 150px; } /* Shrink sidebar on smaller screens */
-            .downloads-content, .downloads-header { height: 80px; } /* Shrink bottom panel */
+            .bottom-panel { height: 80px; } /* Shrink bottom panel */
             .player-controls { display: none; } /* Hide player on small screens if too cramped */
         }
 
@@ -446,7 +482,7 @@
             .title-bar span { font-size: 9px; }
             .results-table { font-size: 9px; }
             .results-table th, .results-table td { padding: 2px 4px; }
-            .downloads-header, .downloads-content { height: 60px; }
+            .bottom-panel { height: 60px; }
             .player-controls { display: none; }
             .status-bar .status-left span:not(.connection-status) { display: none; } /* Hide some status items */
         }
@@ -455,7 +491,7 @@
 <body>
     <div class="window">
         <div class="title-bar">
-            <span>💻 Wickr's Digital Hub</span>
+            <span>💻 Shiloh.exe - Digital Explorer</span>
             <div class="controls">
                 <span>0</span> <span>1</span> <span>r</span> </div>
         </div>
@@ -468,10 +504,11 @@
         </div>
 
         <div class="toolbar">
-            <div class="toolbar-button">About Me</div>
-            <div class="toolbar-button">Skills</div>
-            <div class="toolbar-button">Projects</div>
-            <div class="toolbar-button">Contact</div>
+            <div id="aboutMeBtn" class="toolbar-button active">About Me</div>
+            <div id="skillsBtn" class="toolbar-button">Skills</div>
+            <div id="projectsBtn" class="toolbar-button">Projects</div>
+            <div id="myTunesBtn" class="toolbar-button">My Tunes</div>
+            <div id="contactBtn" class="toolbar-button">Contact</div>
         </div>
 
         <div class="main-content">
@@ -484,222 +521,355 @@
                 <div class="sidebar-section">
                     <div class="sidebar-header">My Domains</div>
                     <div class="sidebar-content">
-                        <div class="sidebar-item selected">💻 Cybersecurity</div>
-                        <div class="sidebar-item">🤖 AI/ML</div>
-                        <div class="sidebar-item">☁️ Cloud Computing</div>
-                        <div class="sidebar-item">🚀 DevOps</div>
-                        <div class="sidebar-item">🛠️ Automation</div>
+                        <div class="sidebar-item selected" data-content-target="pentesting">🛡️ Penetration Testing</div>
+                        <div class="sidebar-item" data-content-target="bug_bounty">💰 Bug Bounty</div>
+                        <div class="sidebar-item" data-content-target="red_teaming">🔴 Red Teaming</div>
+                        <div class="sidebar-item" data-content-target="bluetooth_security">📡 Bluetooth Security</div>
                     </div>
                 </div>
 
                 <div class="sidebar-section">
                     <div class="sidebar-header">Technologies</div>
                     <div class="sidebar-content">
-                        <div class="sidebar-item">🦀 Rust</div>
-                        <div class="sidebar-item">🐍 Python</div>
-                        <div class="sidebar-item">💡 BLE</div>
-                        <div class="sidebar-item">🌐 Networking</div>
-                        <div class="sidebar-item">🐧 Linux</div>
-                        <div class="sidebar-item">⚙️ Assembly</div>
+                        <div class="sidebar-item" data-content-target="rust">🦀 Rust</div>
+                        <div class="sidebar-item" data-content-target="python">🐍 Python</div>
+                        <div class="sidebar-item" data-content-target="networking">🌐 Networking</div>
+                        <div class="sidebar-item" data-content-target="linux">🐧 Linux</div>
+                        <div class="sidebar-item" data-content-target="assembly">⚙️ Assembly</div>
                     </div>
                 </div>
 
                 <div class="sidebar-section">
                     <div class="sidebar-header">Interests</div>
                     <div class="sidebar-content">
-                        <div class="sidebar-item">🎮 Gaming</div>
-                        <div class="sidebar-item">🎵 Music Production</div>
-                        <div class="sidebar-item">📚 Research</div>
-                        <div class="sidebar-item">🔒 Open Source</div>
+                        <div class="sidebar-item" data-content-target="hacking">😈 All Things Hacking</div>
+                        <div class="sidebar-item" data-content-target="research">📚 Security Research</div>
+                        <div class="sidebar-item" data-content-target="open_source">🔒 Open Source</div>
+                        <div class="sidebar-item" data-content-target="music_production">🎵 Music Production</div>
                     </div>
                 </div>
             </div>
 
             <div class="results-area">
-                <div class="results-header">
-                    Featured Tracks / Projects (Personalized Feed)
+                <div id="aboutMeContent" class="content-pane">
+                    <div class="results-header">About Shiloh</div>
+                    <div class="about-me-content">
+                        <p>Hello! I'm **Shiloh**, a dedicated penetration tester, bug bounty hunter, and an endlessly curious human. You might also know me by my various aliases from years across different platforms.</p>
+                        <p>My journey in the digital realm is driven by a deep fascination with **hacking** in all its forms. I thrive on **understanding 'I see now'** – the profound ability to perceive beyond the obvious, to uncover hidden truths, and to truly see without your eyes.</p>
+                        <p>My core passions and areas of expertise include:</p>
+                        <ul>
+                            <li>**Penetration Testing & Red Teaming:** Proactively identifying and exploiting vulnerabilities to strengthen defenses.</li>
+                            <li>**Bug Bounty Hunting:** Discovering critical flaws and contributing to a safer digital ecosystem.</li>
+                            <li>**Bluetooth Security:** Diving deep into wireless protocols to uncover new attack vectors.</li>
+                            <li>**Rust Development:** Building secure, high-performance tools and applications.</li>
+                        </ul>
+                        <p>If you're looking to connect or discuss anything in the realm of digital security, feel free to reach out:</p>
+                        <ul>
+                            <li><strong>Email:</strong> <a href="mailto:0xshiloh@proton.me" style="color: #0084ff; text-decoration: underline;">0xshiloh@proton.me</a></li>
+                            <li><strong>X (formerly Twitter):</strong> <a href="https://x.com/shilohsecurity" target="_blank" style="color: #0084ff; text-decoration: underline;">@shilohsecurity</a></li>
+                        </ul>
+                        <p>Ready to dive deeper? Navigate using the toolbar or sidebar sections!</p>
+                    </div>
                 </div>
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Rating</th>
-                            <th>Vibe</th>
-                            <th>Track / Item</th>
-                            <th>Artist / Source</th>
-                            <th>Duration</th>
-                            <th>Mood</th>
-                            <th>Energy</th>
-                            <th>Status</th>
-                            <th>Released</th>
-                            <th>Format</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><span class="rating-stars">★★★★★</span></td>
-                            <td>T3</td>
-                            <td>Koox</td>
-                            <td>Roogunit</td>
-                            <td>3:45</td>
-                            <td>✅</td>
-                            <td>256 kbps</td>
-                            <td>Online</td>
-                            <td>2023</td>
-                            <td>mp3</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><span class="rating-stars">★★★★☆</span></td>
-                            <td>T2</td>
-                            <td>Molasses</td>
-                            <td>Earl Sweatshirt, RZA</td>
-                            <td>3:09</td>
-                            <td>✅</td>
-                            <td>192 kbps</td>
-                            <td>Online</td>
-                            <td>2015</td>
-                            <td>mp3</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td><span class="rating-stars">★★★★★</span></td>
-                            <td>T3</td>
-                            <td>Lucky You</td>
-                            <td>Deftones - Matrix Reloaded</td>
-                            <td>4:08</td>
-                            <td>✅</td>
-                            <td>320 kbps</td>
-                            <td>Online</td>
-                            <td>2003</td>
-                            <td>mp3</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td><span class="rating-stars">★★★★☆</span></td>
-                            <td>Modem</td>
-                            <td>Peligro</td>
-                            <td>Jay York</td>
-                            <td>3:12</td>
-                            <td>✅</td>
-                            <td>128 kbps</td>
-                            <td>Offline</td>
-                            <td>2024</td>
-                            <td>mp3</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td><span class="rating-stars">★★★★★</span></td>
-                            <td>T3</td>
-                            <td>I Am Nothing</td>
-                            <td>Decoder</td>
-                            <td>4:20</td>
-                            <td>✅</td>
-                            <td>256 kbps</td>
-                            <td>Online</td>
-                            <td>2022</td>
-                            <td>mp3</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td><span class="rating-stars">★★★★★</span></td>
-                            <td>T3</td>
-                            <td>Penetration Testing</td>
-                            <td>Schacke</td>
-                            <td>5:30</td>
-                            <td>✅</td>
-                            <td>320 kbps</td>
-                            <td>Online</td>
-                            <td>2019</td>
-                            <td>mp3</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td><span class="rating-stars">★★★★☆</span></td>
-                            <td>Cable</td>
-                            <td>Red Rum</td>
-                            <td>Lil Wayne</td>
-                            <td>3:30</td>
-                            <td>✅</td>
-                            <td>192 kbps</td>
-                            <td>Online</td>
-                            <td>2008</td>
-                            <td>mp3</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <div id="myTunesContent" class="content-pane" style="display: none;">
+                    <div class="results-header">Shiloh's Featured Tracks</div>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Rating</th>
+                                <th>Vibe</th>
+                                <th>Track / Item</th>
+                                <th>Artist / Source</th>
+                                <th>Duration</th>
+                                <th>Mood</th>
+                                <th>Energy</th>
+                                <th>Status</th>
+                                <th>Released</th>
+                                <th>Format</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span class="rating-stars">★★★★★</span></td>
+                                <td>T3</td>
+                                <td>Koox</td>
+                                <td>Roogunit</td>
+                                <td>3:45</td>
+                                <td>✅</td>
+                                <td>256 kbps</td>
+                                <td>Online</td>
+                                <td>2023</td>
+                                <td>mp3</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span class="rating-stars">★★★★☆</span></td>
+                                <td>T2</td>
+                                <td>Molasses</td>
+                                <td>Earl Sweatshirt, RZA</td>
+                                <td>3:09</td>
+                                <td>✅</td>
+                                <td>192 kbps</td>
+                                <td>Online</td>
+                                <td>2015</td>
+                                <td>mp3</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span class="rating-stars">★★★★★</span></td>
+                                <td>T3</td>
+                                <td>Lucky You</td>
+                                <td>Deftones - Matrix Reloaded</td>
+                                <td>4:08</td>
+                                <td>✅</td>
+                                <td>320 kbps</td>
+                                <td>Online</td>
+                                <td>2003</td>
+                                <td>mp3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span class="rating-stars">★★★★☆</span></td>
+                                <td>Modem</td>
+                                <td>Peligro</td>
+                                <td>Jay York</td>
+                                <td>3:12</td>
+                                <td>✅</td>
+                                <td>128 kbps</td>
+                                <td>Offline</td>
+                                <td>2024</td>
+                                <td>mp3</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span class="rating-stars">★★★★★</span></td>
+                                <td>T3</td>
+                                <td>I Am Nothing</td>
+                                <td>Decoder</td>
+                                <td>4:20</td>
+                                <td>✅</td>
+                                <td>256 kbps</td>
+                                <td>Online</td>
+                                <td>2022</td>
+                                <td>mp3</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span class="rating-stars">★★★★★</span></td>
+                                <td>T3</td>
+                                <td>Penetration Testing</td>
+                                <td>Schacke</td>
+                                <td>5:30</td>
+                                <td>✅</td>
+                                <td>320 kbps</td>
+                                <td>Online</td>
+                                <td>2019</td>
+                                <td>mp3</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span class="rating-stars">★★★★☆</span></td>
+                                <td>Cable</td>
+                                <td>Red Rum</td>
+                                <td>Lil Wayne</td>
+                                <td>3:30</td>
+                                <td>✅</td>
+                                <td>192 kbps</td>
+                                <td>Online</td>
+                                <td>2008</td>
+                                <td>mp3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="skillsContent" class="content-pane" style="display: none;">
+                    <div class="results-header">Shiloh's Core Skills</div>
+                    <div class="about-me-content">
+                        <h1>Skills Matrix</h1>
+                        <p>My expertise spans various critical domains:</p>
+                        <ul>
+                            <li><strong>Cybersecurity:</strong> Penetration Testing, Red Teaming, Bug Bounty Hunting, Malware Analysis, Incident Response</li>
+                            <li><strong>Programming Languages:</strong> Rust, Python, C/C++, Assembly</li>
+                            <li><strong>Network Security:</strong> Bluetooth, Wi-Fi, Protocol Analysis, Secure Communications</li>
+                            <li><strong>Cloud & DevOps:</strong> AWS, Docker, Kubernetes, CI/CD Pipelines (with a security focus)</li>
+                        </ul>
+                        <p>Continuously expanding knowledge in offensive security techniques and low-level system vulnerabilities. Always eager to tackle new challenges!</p>
+                    </div>
+                </div>
+                <div id="projectsContent" class="content-pane" style="display: none;">
+                    <div class="results-header">Shiloh's Projects Log</div>
+                    <div class="about-me-content">
+                        <h1>Project Database</h1>
+                        <p>A selection of my ongoing and completed projects, often driven by my curiosity to understand and secure:</p>
+                        <ul>
+                            <li><strong>Bluetooth Vulnerability Research:</strong> Discovering and exploiting flaws in BLE and classic Bluetooth stacks.</li>
+                            <li><strong>Custom Red Team Tooling (Rust):</strong> Developing stealthy and efficient tools for simulated adversary operations.</li>
+                            <li><strong>Automated Bug Discovery Framework:</strong> A personal project for streamlining bug bounty reconnaissance and initial analysis.</li>
+                            <li><strong>OSINT Automation Scripts:</strong> Python tools for gathering and analyzing publicly available information for security assessments.</li>
+                        </ul>
+                        <p>More detailed project breakdowns and code repositories available upon request or via direct connection.</p>
+                    </div>
+                </div>
+                <div id="contactContent" class="content-pane" style="display: none;">
+                    <div class="results-header">Connect with Shiloh</div>
+                    <div class="about-me-content">
+                        <h1>Initiate Connection Protocol</h1>
+                        <p>Ready to collaborate, discuss digital security, or share insights on the latest exploits?</p>
+                        <p>You can reach me directly:</p>
+                        <ul>
+                            <li><strong>Email (Secure):</strong> <a href="mailto:0xshiloh@proton.me" style="color: #0084ff; text-decoration: underline;">0xshiloh@proton.me</a></li>
+                            <li><strong>X (formerly Twitter):</strong> <a href="https://x.com/shilohsecurity" target="_blank" style="color: #0084ff; text-decoration: underline;">@shilohsecurity</a></li>
+                        </ul>
+                        <p>Looking forward to a secure transmission!</p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div class="bottom-panel">
             <div class="downloads-header">
-                📝 Latest Logs / Current Focus
+                📝 Shiloh's Activity Log / Current Focus
             </div>
             <div class="downloads-content">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                    <span style="color: #0084ff;">[11:50]</span> <span>Investigating BLE security protocols.</span>
+                    <span style="color: #0084ff;">[12:00]</span> <span>Analyzing Bluetooth LE vulnerabilities.</span>
                     <div class="progress-bar" style="width: 80px;"><div class="progress-fill" style="width: 70%;"></div></div>
                     <span>70%</span>
-                    <span class="speed-indicator">Progressing...</span>
+                    <span class="speed-indicator">Scanning...</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                    <span style="color: #0084ff;">[11:45]</span> <span>Refining Rust async patterns.</span>
+                    <span style="color: #0084ff;">[11:55]</span> <span>Developing Rust-based red team tools.</span>
                     <div class="progress-bar" style="width: 80px;"><div class="progress-fill" style="width: 90%;"></div></div>
                     <span>90%</span>
                     <span class="speed-indicator">Compiling...</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <span style="color: #0084ff;">[11:50]</span> <span>Hunting for new bug bounties.</span>
+                    <div class="progress-bar" style="width: 80px;"><div class="progress-fill" style="width: 55%;"></div></div>
+                    <span>55%</span>
+                    <span class="speed-indicator">Searching...</span>
                 </div>
             </div>
         </div>
 
         <div class="player-controls">
             <div class="player-button" title="View Profile">4</div> <div class="player-button" title="Open Console">;</div> <div class="player-button" title="Adjust Settings">:</div> <div class="player-button" title="Deploy Project">9</div> <div class="player-button" title="Share Data">></div> <div class="volume-slider" title="System Load"></div>
-            <span style="margin-left: 8px; font-size: 11px;">🎵 Now Processing: Secure Network Comm.</span>
+            <span style="margin-left: 8px; font-size: 11px;">🎵 Now Processing: Zero-Day Discovery</span>
         </div>
 
         <div class="status-bar">
             <div class="status-left">
                 <div class="connection-status">
                     <div class="connection-indicator"></div>
-                    <span>WickrNet Connected</span>
+                    <span>Shiloh's Network Connected</span>
                 </div>
                 <span>🌐 127 Peers</span>
                 <span>📤 4 Projects (2.1 GB/s)</span>
                 <span>📥 8 Ideas (5.6 GB/s)</span>
             </div>
             <div class="status-right">
-                <span class="limewire-logo">⚡ Wickr's Digital Core</span>
+                <span class="limewire-logo">⚡ Shiloh's Digital Core</span>
             </div>
         </div>
     </div>
 
     <script>
-        // Basic interactivity (keeping the Limewire click/hover feel)
+        // --- Content Switching Logic ---
+        const toolbarButtons = document.querySelectorAll('.toolbar-button');
+        const contentPanes = document.querySelectorAll('.content-pane');
+
+        function showContent(contentId) {
+            contentPanes.forEach(pane => {
+                pane.style.display = 'none'; // Hide all content panes
+            });
+            document.getElementById(contentId).style.display = 'flex'; // Show the selected pane
+            if (contentId === 'myTunesContent') {
+                 // My Tunes content needs column layout, others can be block/flex-column
+                 document.getElementById(contentId).style.flexDirection = 'column';
+            } else {
+                document.getElementById(contentId).style.flexDirection = 'column'; // Default for text based panes
+            }
+        }
+
+        toolbarButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove 'active' class from all buttons
+                toolbarButtons.forEach(btn => btn.classList.remove('active'));
+                // Add 'active' class to the clicked button
+                this.classList.add('active');
+
+                // Determine which content to show based on button ID
+                let contentToShowId;
+                switch(this.id) {
+                    case 'aboutMeBtn': contentToShowId = 'aboutMeContent'; break;
+                    case 'skillsBtn': contentToShowId = 'skillsContent'; break;
+                    case 'projectsBtn': contentToShowId = 'projectsContent'; break;
+                    case 'myTunesBtn': contentToShowId = 'myTunesContent'; break;
+                    case 'contactBtn': contentToShowId = 'contactContent'; break;
+                    default: contentToShowId = 'aboutMeContent';
+                }
+                showContent(contentToShowId);
+            });
+        });
+
+        // Initialize to show About Me content on load
+        showContent('aboutMeContent');
+
+
+        // --- Sidebar Item Clicking (Optional: could load content into results-area) ---
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function() {
                 document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('selected'));
                 this.classList.add('selected');
-                // You could add logic here to load content based on the selected item
-                console.log(`Sidebar item selected: ${this.textContent.trim()}`);
+
+                // Example: You could load specific details into the main content area here
+                // For now, it just logs what was clicked.
+                const contentType = this.getAttribute('data-content-target');
+                console.log(`Sidebar item selected: ${this.textContent.trim()} (Category: ${contentType})`);
+                // You could, for example, filter content within #skillsContent based on this
             });
         });
 
+        // --- Results Table Interactivity (for My Tunes) ---
         document.querySelectorAll('.results-table tr').forEach(row => {
-            // Skip the header row
-            if (row.querySelector('th')) return;
+            if (row.querySelector('th')) return; // Skip the header row
 
             row.addEventListener('dblclick', function() {
                 const trackName = this.cells[3].textContent; // Get the "Track / Item" cell
-                alert(`Initiating download for: ${trackName}...`);
-                // You could add real download/navigation logic here
+                alert(`Now playing: ${trackName}...`);
+                // Update "Now Playing" in player controls
+                document.querySelector('.player-controls span').textContent = `🎵 Now Playing: ${trackName}`;
             });
         });
 
-        document.querySelectorAll('.toolbar-button, .player-button, .search-button').forEach(button => {
+        // --- Toolbar & Player Button Interactivity ---
+        document.querySelectorAll('.player-button').forEach(button => {
             button.addEventListener('click', function() {
-                console.log(`Button clicked: ${this.textContent.trim()}`);
-                // Add specific actions for each button here if needed
+                console.log(`Player button clicked: ${this.title}`);
             });
+        });
+
+        // --- Search Functionality (basic text search within current content pane) ---
+        document.querySelector('.search-button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            const currentPaneId = document.querySelector('.content-pane[style*="display: flex"]').id; // Get ID of visible pane
+            const currentPaneElement = document.getElementById(currentPaneId);
+
+            if (searchTerm.trim()) {
+                alert(`Searching within "${currentPaneId}" for: "${searchTerm}"`);
+                // Implement actual search/highlighting logic here
+                // For a simple text highlight:
+                // if (currentPaneElement.textContent.toLowerCase().includes(searchTerm)) {
+                //    alert(`Found "${searchTerm}" in ${currentPaneId}!`);
+                // } else {
+                //    alert(`"${searchTerm}" not found in ${currentPaneId}.`);
+                // }
+            }
         });
 
         document.querySelector('.search-input').addEventListener('keypress', function(e) {
@@ -708,22 +878,15 @@
             }
         });
 
-        document.querySelector('.search-button').addEventListener('click', function() {
-            const searchTerm = document.querySelector('.search-input').value;
-            if (searchTerm.trim()) {
-                alert(`Searching Wickr's database for: "${searchTerm}"`);
-            }
-        });
-
-        // Mimic random network activity (optional, but adds to the vibe)
+        // --- Mimic random network activity in status bar ---
         setInterval(() => {
             const randPeers = Math.floor(Math.random() * 50) + 10; // 10-60 peers
             const randUpload = (Math.random() * 10).toFixed(1); // 0.0-9.9 GB/s
             const randDownload = (Math.random() * 7).toFixed(1); // 0.0-6.9 GB/s
 
             document.querySelector('.status-left span:nth-child(2)').textContent = `🌐 ${randPeers} Peers`;
-            document.querySelector('.status-left span:nth-child(3)').textContent = `📤 ${Math.floor(Math.random() * 5) + 1} Projects (${randUpload} GB/s)`;
-            document.querySelector('.status-left span:nth-child(4)').textContent = `📥 ${Math.floor(Math.random() * 5) + 1} Ideas (${randDownload} GB/s)`;
+            document.querySelector('.status-left span:nth-child(3)').textContent = `📤 ${Math.floor(Math.random() * 5) + 1} Files (${randUpload} GB/s)`;
+            document.querySelector('.status-left span:nth-child(4)').textContent = `📥 ${Math.floor(Math.random() * 5) + 1} Files (${randDownload} GB/s)`;
         }, 5000); // Update every 5 seconds
     </script>
 </body>
