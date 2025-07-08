@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ALLITHOST</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #00ffcc;
+      font-family: 'Orbitron', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .glitch {
+      font-size: 3em;
+      position: relative;
+      animation: flicker 2s infinite;
+    }
+
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .glitch::before {
+      color: #ff00c8;
+      z-index: -1;
+      top: -2px;
+      animation: glitchTop 1s infinite linear alternate-reverse;
+    }
+
+    .glitch::after {
+      color: #00ffff;
+      z-index: -2;
+      top: 2px;
+      animation: glitchBottom 1.5s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitchTop {
+      0% { clip-path: inset(0 0 80% 0); transform: translate(-2px, -2px); }
+      100% { clip-path: inset(80% 0 0 0); transform: translate(2px, 2px); }
+    }
+
+    @keyframes glitchBottom {
+      0% { clip-path: inset(80% 0 0 0); transform: translate(2px, -2px); }
+      100% { clip-path: inset(0 0 80% 0); transform: translate(-2px, 2px); }
+    }
+
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.5; }
+    }
+
+    .subtext {
+      margin-top: 20px;
+      font-size: 1.2em;
+      opacity: 0.6;
+      text-align: center;
+      animation: fadeIn 3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="glitch" data-text="ALLITHOST">ALLITHOST</div>
+    <div class="subtext">Red Team Operations | Signal-Based Protocols | BLE Mesh Recon</div>
+  </div>
+</body>
+</html>
